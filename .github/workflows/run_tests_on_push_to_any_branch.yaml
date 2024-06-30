@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./.github/actions/python-setup-action
+      - uses: ./.github/actions/python-setup-action/action.yml
 
       - name: Setup docker with AWS DynamoDB local
         run: docker-compose up -d
