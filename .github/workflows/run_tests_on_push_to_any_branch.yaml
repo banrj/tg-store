@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - uses: .github/actions/python-setup-action
+      - uses: ./.github/actions/python-setup-action
 
       - name: Setup docker with AWS DynamoDB local
         run: docker-compose up -d
