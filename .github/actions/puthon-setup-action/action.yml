@@ -1,0 +1,38 @@
+name: 'Setup Python'
+description: 'Install python'
+
+inputs:
+  version:
+    description: 'python version'
+    default: '3.11'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.version }}
+        architecture: x64
+
+    - name: Install Python Virtual ENV
+      shell: bash
+      run: pip3 install virtualenv
+
+    - name: Setup Virtual env
+      uses: actions/cache@v3
+      id: cache-venv
+      with:
+        path: venv
+        key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-venv-${{ hashFiles('**/requirements*.txt') }}
+
+    - name: Activate and Install Depencies into Virtual env
+      shell: bash
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip3 install -r requirements.txt
+      if: steps.cache-venv.outputs.cache-hit != 'true'
