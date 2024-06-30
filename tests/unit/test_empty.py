@@ -1,5 +1,5 @@
 
 
-def empty_test():
+def test_empty():
     assert 2 == 2
 
