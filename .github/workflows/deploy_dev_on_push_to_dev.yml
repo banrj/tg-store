@@ -20,7 +20,7 @@ jobs:
         uses: yc-actions/yc-sls-function@v2
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
-          folder-id: 'b1gbo1d6kv69h0am3bp8'
+          folder-id: 'b1gvn67m15ao38d5d0qe'
           function-name: 'tg-store-dev'
           runtime: 'python311'
           memory: '128Mb'
