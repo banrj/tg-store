@@ -25,7 +25,7 @@ jobs:
           runtime: 'python311'
           memory: '128Mb'
           execution-timeout: 10
-          entrypoint: 'function_app.handle'
+          entrypoint: 'function_app.handler'
           environment: |
             
             YC_DATABASE_URL=${{ secrets.YC_DATABASE_URL }}
@@ -33,7 +33,7 @@ jobs:
             YC_SERVICE_ACCOUNT_SECRET_KEY=${{ secrets.YC_SERVICE_ACCOUNT_SECRET_KEY }}
             
             TABLE_SUFFIX=dev
-            
+            WEBHOOK=https://functions.yandexcloud.net/d4epu38hcspncmgug0p3/telegram
             TG_KEY=${{ secrets.TG_KEY }}
           include: |
             ./app

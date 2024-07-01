@@ -17,8 +17,10 @@ class Settings(BaseSettings):
 
     TG_KEY: str
 
-    VERSION: str = 0
-    USE_WEBHOOK: bool = True
+    VERSION: str = 'dev'
+
+    USE_WEBHOOK: bool = False
+    WEBHOOK: str
 
 
 match os.getenv('MODE'):
