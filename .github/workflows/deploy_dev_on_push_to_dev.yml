@@ -23,7 +23,7 @@ jobs:
           folder-id: 'b1gvn67m15ao38d5d0qe'
           function-name: 'tg-store-dev'
           runtime: 'python311'
-          memory: '128Mb'
+          memory: '256Mb'
           execution-timeout: 10
           entrypoint: 'function_app.handler'
           environment: |
