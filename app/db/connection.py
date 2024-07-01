@@ -24,7 +24,8 @@ async def dynamodb_connection(
         "endpoint_url": endpoint_url,
     }
 
-    async with session.resource(**setup_data) as dyno_resource, session.client(**setup_data) as dyno_client:
+    async with session.client(**setup_data) as dyno_client:
+        dyno_resource = session.resource(**setup_data)
         yield dyno_resource, dyno_client
 
 
@@ -45,5 +46,7 @@ class DynamoConnection:
         logger.debug(f'{table_name=}')
         if table_name is None:
             table_name = self._default_table
-        yield await self._resource.Table(table_name)
+        table = await self._resource.Table(table_name)
+        logger.debug(f'{table_name=}')
+        yield table
         logger.debug(f'dynamo db connection to {table_name} is done')

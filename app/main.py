@@ -24,16 +24,16 @@ async def lifespan(_: FastAPI):
 
         conn = app_dynamo.DynamoConnection(client_conn, resource_conn)
         logger.debug(f'starting... after conn created')
-        async with conn.table() as table:
+        async with conn.table() as (table):
             logger.debug(f'starting... before yield, {table=}, {client_conn=}')
             logger.info("APPLICATION STARTUP \t\tCOMPLETE")
             logger.info("DYNAMO STORAGE INITIALIZATION")
             dynamo_storage = DynamoDBStorage(table=table)
             logger.info("DYNAMO STORAGE INITIALIZATION \t\tSUCCESS")
-            async with create_tg(bot=bot, storage=dynamo_storage, use_webhook=settings.USE_WEBHOOK):
+            async with create_tg(bot=bot, storage=dynamo_storage, use_webhook=settings.USE_WEBHOOK) as (tg_dp):
                 logger.info("TG BOT - SUCCESS")
                 yield {"dynamo_table": table, "dynamo_client": client_conn, "storage": dynamo_storage,
-                       "bot": bot}
+                       "bot": bot, 'dispatcher_tg': tg_dp}
                 logger.info("TG BOT`s SHUTDOWN")
 
     logger.info("APPLICATION SHUTDOWN")
