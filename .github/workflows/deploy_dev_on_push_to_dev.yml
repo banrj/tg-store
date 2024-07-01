@@ -33,7 +33,7 @@ jobs:
             YC_SERVICE_ACCOUNT_SECRET_KEY=${{ secrets.YC_SERVICE_ACCOUNT_SECRET_KEY }}
             
             TABLE_SUFFIX=dev
-            WEBHOOK=https://functions.yandexcloud.net/d4epu38hcspncmgug0p3/telegram
+            WEBHOOK=https://d5d6goq6did08enqmi0a.apigw.yandexcloud.net/tg-webhook
             TG_KEY=${{ secrets.TG_KEY }}
           include: |
             ./app
