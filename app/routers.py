@@ -10,7 +10,7 @@ main_router = APIRouter()
 bot = Bot(settings.TG_KEY)
 
 
-@main_router.post('/telegram', tags=['telegram'], response_model=None)
+@main_router.post('/tg-webhook', tags=['telegram'], response_model=None)
 async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
     """Handle incoming Telegram updates by putting them into the `update_queue`"""
     json_data = await request.json()
