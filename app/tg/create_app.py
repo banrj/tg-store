@@ -17,3 +17,13 @@ async def create_tg(bot: Bot, storage: DynamoDBStorage, use_webhook: bool):
         logger.info('BOT USE LOCAL POLLING')
         await dp.start_polling(bot)
 
+    yield
+    if not use_webhook:
+        logger.info('stop polling')
+        await dp.stop_polling()
+
+    await bot.delete_webhook()
+    dp.shutdown()
+    logger.info('DELETE WEBHOOK')
+    logger.info('SHUTDOWN')
+

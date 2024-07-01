@@ -5,7 +5,10 @@ from app.config import settings
 TG_TOKEN = settings.TG_KEY
 WEBHOOK_URL = settings.WEBHOOK
 
-url = 'https://api.telegram.org/bot{token}/setWebhook'.format(token=TG_TOKEN)
+method = 'setWebhook'
+# method = 'deleteWebhook'
+
+url = 'https://api.telegram.org/bot{token}/{method}'.format(token=TG_TOKEN, method=method)
 
 data = {'url': WEBHOOK_URL}
 
