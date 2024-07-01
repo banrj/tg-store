@@ -24,8 +24,8 @@ async def dynamodb_connection(
         "endpoint_url": endpoint_url,
     }
 
-    async with session.client(**setup_data) as dyno_client:
-        dyno_resource = session.resource(**setup_data)
+    async with session.resource(**setup_data) as dyno_resource, session.client(**setup_data) as dyno_client:
+
         yield dyno_resource, dyno_client
 
 
