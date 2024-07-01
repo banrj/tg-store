@@ -35,6 +35,7 @@ jobs:
             TABLE_SUFFIX=dev
             WEBHOOK=https://d5d6goq6did08enqmi0a.apigw.yandexcloud.net/tg-webhook
             TG_KEY=${{ secrets.TG_KEY }}
+            USE_WEBHOOK=True
           include: |
             ./app
             function_app.py
