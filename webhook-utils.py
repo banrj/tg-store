@@ -3,7 +3,7 @@ from app.config import settings
 
 
 TG_TOKEN = settings.TG_KEY
-WEBHOOK_URL = settings.WEBHOOK
+WEBHOOK_URL = 'https://d5d6goq6did08enqmi0a.apigw.yandexcloud.net/tg-webhook'
 
 method = 'setWebhook'
 # method = 'deleteWebhook'

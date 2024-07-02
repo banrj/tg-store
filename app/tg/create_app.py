@@ -13,9 +13,9 @@ async def create_tg(bot: Bot, storage: DynamoDBStorage, use_webhook: bool):
 
     dp.include_router(start_rout)
     if use_webhook:
-        webhook_url = settings.WEBHOOK
-        await bot.set_webhook(webhook_url)
-        logger.info(f'Webhook use: {webhook_url}')
+        # webhook_url = settings.WEBHOOK
+        # await bot.set_webhook(webhook_url)
+        logger.info(f'Webhook use: ')
     else:
         logger.info('BOT USE LOCAL POLLING')
         await dp.start_polling(bot)
