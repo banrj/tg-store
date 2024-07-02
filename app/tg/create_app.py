@@ -28,7 +28,7 @@ async def create_tg(bot: Bot, storage: DynamoDBStorage, use_webhook: bool):
             await dp.stop_polling()
 
         await bot.delete_webhook()
-        await dp.shutdown()
+        await bot.close()
         logger.info('DELETE WEBHOOK')
         logger.info('SHUTDOWN')
 
