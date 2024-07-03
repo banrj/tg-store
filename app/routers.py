@@ -16,7 +16,7 @@ async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
     """Handle incoming Telegram updates by putting them into the `update_queue`"""
     try:
         json_data = await request.json()
-        logger.info(f"Received update: {json_data}")
+        logger.info(f"Дернули rout: {json_data}")
 
         update = Update.de_json(data=json_data)
         await tg_app.feed_update(update=update, bot=bot)
@@ -24,5 +24,5 @@ async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
         logger.info("Update processed successfully")
         return Response(status_code=200)
     except Exception as e:
-        logger.error(f"Error handling update: {e}")
+        logger.error(f"Что-то в роуте: {e}")
         return Response(status_code=500, content=str(e))
