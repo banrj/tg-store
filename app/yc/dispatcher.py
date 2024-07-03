@@ -57,6 +57,8 @@ class Dispatcher:
         self.asgi_app = asgi_app
 
     async def _invoke_app(self, event: YFunctionEvent):
+        dispatcher_loger.info(f"Пошел ИНВОК")
+
         dispatcher_loger.debug(event)
 
         host_url = event["headers"].get("Host", "https://raw-function.net")
@@ -91,7 +93,13 @@ class Dispatcher:
                 "statusCode": 500,
                 "body": "got empty event",
             }
+        if 'event_metadata' in event:
+            return {
+                "statusCode": 200,
+                "body": "ok",
+            }
         response = await self._invoke_app(event)
 
         dispatcher_loger.info(f"DISPATCHER SHUTDOWN")
         return _patch_function_response(response)
+
