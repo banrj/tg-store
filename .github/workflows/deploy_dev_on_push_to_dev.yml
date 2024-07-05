@@ -25,7 +25,7 @@ jobs:
           runtime: 'python311'
           memory: '256Mb'
           execution-timeout: 10
-          entrypoint: 'function_app.handler'
+          entrypoint: 'function_app.handle'
           environment: |
             
             YC_DATABASE_URL=${{ secrets.YC_DATABASE_URL }}
