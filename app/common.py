@@ -7,7 +7,7 @@ from aiogram import Dispatcher as BotDispatcher
 
 
 def tg_app(req: fastapi.Request) -> BotDispatcher:
-    return req.state.tg_app
+    return req.state.tg_dp
 
 
 @contextlib.asynccontextmanager
