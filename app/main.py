@@ -9,9 +9,9 @@ from contextlib import asynccontextmanager
 from app.routers import main_router
 from app.tg.create_app import create_tg
 from app.tg.fsm.storage import DynamoDBStorage
+from app.db import connection as app_dynamo
 from app.config import settings
 from app.core.log_config import logger
-from app.db import connection as app_dynamo
 
 
 @asynccontextmanager
@@ -48,6 +48,7 @@ def create_app() -> FastAPI:
         root_path=f"/{settings.VERSION}",
         title="TG STORE DEV"
     )
+    logger.info('INCLUDES ROUTERS')
     fastapi_dev.include_router(main_router)
 
     return fastapi_dev

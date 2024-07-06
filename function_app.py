@@ -2,11 +2,18 @@ import datetime
 import re
 import httpx
 from base64 import b64decode, b64encode
+
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
 from fastapi import FastAPI
+from aiogram import Bot
 
 from app.main import create_app as create_fastapi_app
 from app.core.log_config import logger
-
+from app.config import settings
+from app.tg.create_app import create_tg
+from app.tg.fsm.storage import DynamoDBStorage
+from app.db import connection as app_dynamo
 
 
 def body_to_bytes(event):
@@ -78,8 +85,29 @@ async def handle(event, _):
     logger.info(f"APPLICATION STARTUP {datetime.datetime.now()}", extra={'user': 'handler'})
     logger.debug(f'{event=}', extra={'user': 'handler'})
     fastapi_app = create_fastapi_app()
-    if not hasattr(fastapi_app.state, "bot"):
-        logger.debug(f'Bot in state not found {fastapi_app.state}')
+    try:
+        if not hasattr(fastapi_app.state, "bot"):
+            logger.info("Initializing components")
+            bot = Bot(token=settings.TG_KEY, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+            async with app_dynamo.dynamodb_connection() as (resource_conn, client_conn):
+                conn = app_dynamo.DynamoConnection(client_conn, resource_conn)
+                async with conn.table() as table:
+                    dynamo_storage = DynamoDBStorage(table=table)
+                    async with create_tg(bot=bot, storage=dynamo_storage, use_webhook=settings.USE_WEBHOOK) as tg_dp:
+                        fastapi_app.state.dynamo_table = table
+                        fastapi_app.state.dynamo_client = client_conn
+                        fastapi_app.state.storage = dynamo_storage
+                        fastapi_app.state.bot = bot
+                        fastapi_app.state.dispatcher_tg = tg_dp
+        else:
+            logger.info("Components already initialized")
+
+    except Exception as e:
+        logger.error(f"Error during initialization: {e}")
+        return {
+            "statusCode": 500,
+            "body": "Error during initialization",
+        }
     if not event:
         return {
             "statusCode": 500,
