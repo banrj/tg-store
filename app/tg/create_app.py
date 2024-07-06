@@ -1,7 +1,12 @@
 from aiogram import Bot, Dispatcher
 from contextlib import asynccontextmanager
 from asyncio import create_task, CancelledError
+
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
+
 from app.tg.fsm.storage import DynamoDBStorage
+from app.db import connection as app_dynamo
 from app.tg.routers.start import router as start_rout
 from app.core.log_config import logger
 from app.config import settings
@@ -33,3 +38,22 @@ async def create_tg(bot: Bot, storage: DynamoDBStorage, use_webhook: bool):
 
         await bot.close()
         logger.info('SHUTDOWN')
+
+
+async def initialize_components(fastapi):
+    logger.info("Initializing components")
+    bot = Bot(token=settings.TG_KEY, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    async with app_dynamo.dynamodb_connection() as (resource_conn, client_conn):
+        conn = app_dynamo.DynamoConnection(client_conn, resource_conn)
+        async with conn.table() as table:
+            dynamo_storage = DynamoDBStorage(table=table)
+            dp = Dispatcher(storage=dynamo_storage)
+            dp.include_router(start_rout)
+
+            logger.info(f'Webhook use: {settings.WEBHOOK}')
+
+            fastapi.state.dynamo_table = table
+            fastapi.state.dynamo_client = client_conn
+            fastapi.state.storage = dynamo_storage
+            fastapi.state.bot = bot
+            fastapi.state.dispatcher_tg = dp
