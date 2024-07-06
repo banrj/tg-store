@@ -16,7 +16,8 @@ async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
     """Handle incoming Telegram updates by putting them into the `update_queue`"""
     try:
         json_data = await request.json()
-        logger.info(f"Дернули rout: {json_data}")
+        json_state = await request.app.state.json()
+        logger.info(f"Дернули rout: {json_data}, {json_state=}")
 
         update = Update.model_validate(await request.json(), context={"bot": bot})
         await tg_app.feed_update(update=update, bot=bot)
