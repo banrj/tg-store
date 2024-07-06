@@ -35,7 +35,8 @@ async def lifespan(fastapi_app: FastAPI):
             async with create_tg(bot=bot, storage=dynamo_storage, use_webhook=settings.USE_WEBHOOK) as tg_dp:
                 logger.info("TG BOT - SUCCESS")
                 fastapi_app.state.tg_app = tg_dp
-                yield
+                yield {"dynamo_table": table, "dynamo_client": client_conn, "storage": dynamo_storage,
+                       "bot": bot, 'dispatcher_tg': tg_dp}
                 logger.info("TG BOT`s SHUTDOWN")
 
     logger.info("APPLICATION SHUTDOWN")
@@ -52,7 +53,6 @@ def create_app() -> FastAPI:
     return fastapi_dev
 
 
-app = create_app()
-
 if __name__ == '__main__':
+    app = create_app()
     uvicorn.run('app.main:app', host='0.0.0.0', port=settings.PORT, reload=True)
