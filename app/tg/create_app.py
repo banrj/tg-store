@@ -56,3 +56,8 @@ async def initialize_components(fastapi):
             fastapi.state.storage = dynamo_storage
             fastapi.state.bot = bot
             fastapi.state.dispatcher_tg = dp
+
+
+async def shutdown(fastapi):
+    await fastapi.app.state.bot.close()
+    logger.info('SHUTDOWN')

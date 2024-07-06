@@ -5,6 +5,7 @@ from aiogram.types import Update
 from app.common import TelegramApp
 from app.config import settings
 from app.core.log_config import logger
+from app.tg.create_app import shutdown
 
 main_router = APIRouter()
 
@@ -21,11 +22,13 @@ async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
         update = Update.model_validate(await request.json(), context={"bot": state_dict['bot']})
         await tg_app.feed_webhook_update(update=update, bot=state_dict['bot'])
 
-        logger.info("Update processed successfully")
-        return Response(status_code=200, content='Update передан боту')
     except Exception as e:
         logger.error(f"Что-то в роуте: {e}")
         return Response(status_code=500, content=str(e))
+    finally:
+        logger.info("Update processed successfully")
+        await shutdown(request.app)
+        return Response(status_code=200, content='Update передан боту')
 
 
 @main_router.get('/checkstate', tags=['service'])
