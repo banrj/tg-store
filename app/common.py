@@ -1,13 +1,15 @@
 import contextlib
 import typing as t
-
-import fastapi
 import httpx
 from aiogram import Dispatcher as BotDispatcher
+from fastapi import HTTPException, Request, Depends
 
 
-def tg_app(req: fastapi.Request) -> BotDispatcher:
-    return req.app.state.tg_app
+def tg_app(req: Request) -> BotDispatcher:
+    tgapp = getattr(req.app.state, 'tg_app', None)
+    if tgapp is None:
+        raise HTTPException(status_code=500, detail="Telegram app is not initialized")
+    return tgapp
 
 
 @contextlib.asynccontextmanager
@@ -18,4 +20,4 @@ async def get_async_httpx_client(**kwargs) -> httpx.AsyncClient:
         yield session
 
 
-TelegramApp = t.Annotated[BotDispatcher, fastapi.Depends(tg_app)]
+TelegramApp = t.Annotated[BotDispatcher, Depends(tg_app)]
