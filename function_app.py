@@ -7,7 +7,6 @@ from fastapi import FastAPI
 from app.main import create_app as create_fastapi_app
 from app.core.log_config import logger
 
-fastapi_app = create_fastapi_app()
 
 
 def body_to_bytes(event):
@@ -76,6 +75,7 @@ def patch_response(response: httpx.Response):
 
 
 async def handle(event, _):
+    fastapi_app = create_fastapi_app()
     logger.info(f"APPLICATION STARTUP {datetime.datetime.now()}", extra={'user': 'handler'})
     logger.debug(f'{event=}', extra={'user': 'handler'})
     if not event:
