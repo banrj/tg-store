@@ -81,7 +81,6 @@ async def handle(event, _):
     fastapi_app = create_fastapi_app()
     try:
         if not hasattr(fastapi_app.state, "bot"):
-            logger.info("Initializing components")
             await initialize_components(fastapi_app)
         else:
             logger.info("Components already initialized")

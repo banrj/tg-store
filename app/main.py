@@ -34,7 +34,6 @@ async def lifespan(_: FastAPI):
             logger.info("DYNAMO STORAGE INITIALIZATION \t\tSUCCESS")
             async with create_tg(bot=bot, storage=dynamo_storage, use_webhook=settings.USE_WEBHOOK) as tg_dp:
                 logger.info("TG BOT - SUCCESS")
-                # fastapi_app.state.tg_app = tg_dp
                 yield {"dynamo_table": table, "dynamo_client": client_conn, "storage": dynamo_storage,
                        "bot": bot, 'dispatcher_tg': tg_dp}
                 logger.info("TG BOT`s SHUTDOWN")

@@ -14,12 +14,11 @@ from app.config import settings
 
 @asynccontextmanager
 async def create_tg(bot: Bot, storage: DynamoDBStorage, use_webhook: bool):
+    logger.info("Crate TG in Lifespan")
     dp = Dispatcher(storage=storage)
 
     dp.include_router(start_rout)
     if use_webhook:
-        # webhook_url = settings.WEBHOOK
-        # await bot.set_webhook(webhook_url)
         logger.info(f'Webhook use: {settings.WEBHOOK}')
     else:
         logger.info('BOT USE LOCAL POLLING')
