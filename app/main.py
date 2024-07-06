@@ -15,7 +15,7 @@ from app.db import connection as app_dynamo
 
 
 @asynccontextmanager
-async def lifespan(fastapi_app: FastAPI):
+async def lifespan(_: FastAPI):
     logger.info("APPLICATION STARTUP")
     bot = Bot(token=settings.TG_KEY, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     logger.info("BOT CREATED")
@@ -34,7 +34,7 @@ async def lifespan(fastapi_app: FastAPI):
             logger.info("DYNAMO STORAGE INITIALIZATION \t\tSUCCESS")
             async with create_tg(bot=bot, storage=dynamo_storage, use_webhook=settings.USE_WEBHOOK) as tg_dp:
                 logger.info("TG BOT - SUCCESS")
-                fastapi_app.state.tg_app = tg_dp
+                # fastapi_app.state.tg_app = tg_dp
                 yield {"dynamo_table": table, "dynamo_client": client_conn, "storage": dynamo_storage,
                        "bot": bot, 'dispatcher_tg': tg_dp}
                 logger.info("TG BOT`s SHUTDOWN")
