@@ -75,9 +75,11 @@ def patch_response(response: httpx.Response):
 
 
 async def handle(event, _):
-    fastapi_app = create_fastapi_app()
     logger.info(f"APPLICATION STARTUP {datetime.datetime.now()}", extra={'user': 'handler'})
     logger.debug(f'{event=}', extra={'user': 'handler'})
+    fastapi_app = create_fastapi_app()
+    if not hasattr(fastapi_app.state, "bot"):
+        logger.debug(f'Bot in state not found {fastapi_app.state}')
     if not event:
         return {
             "statusCode": 500,
