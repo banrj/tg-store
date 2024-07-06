@@ -19,7 +19,7 @@ async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
         logger.info(f"Дернули rout: {json_data}")
 
         update = Update.model_validate(await request.json(), context={"bot": bot})
-        await tg_app.feed_update(update=update, bot=bot)
+        await tg_app.feed_webhook_update(update=update, bot=bot)
 
         logger.info("Update processed successfully")
         return Response(status_code=200, content='Update передан боту')
