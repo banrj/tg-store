@@ -1,5 +1,5 @@
 from fastapi import Response, Request, APIRouter
-from aiogram import Dispatcher, Bot
+from aiogram import Bot
 from aiogram.types import Update
 
 from app.common import TelegramApp
@@ -26,3 +26,9 @@ async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
     except Exception as e:
         logger.error(f"Что-то в роуте: {e}")
         return Response(status_code=500, content=str(e))
+
+
+@main_router.get('/checkstate', tags=['service'])
+async def check_state(request: Request):
+    state = request.app.state
+    return Response(status_code=200, content=str(state))

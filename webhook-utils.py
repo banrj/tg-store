@@ -6,8 +6,8 @@ TG_TOKEN = settings.TG_KEY
 WEBHOOK_URL = 'https://d5d6goq6did08enqmi0a.apigw.yandexcloud.net/tgwebhook'
 
 # method = 'setWebhook'
-# method = 'deleteWebhook'
-method = 'getWebhookInfo'
+method = 'deleteWebhook'
+# method = 'getWebhookInfo'
 
 url = 'https://api.telegram.org/bot{token}/{method}'.format(token=TG_TOKEN, method=method)
 

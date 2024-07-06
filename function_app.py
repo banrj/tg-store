@@ -1,10 +1,8 @@
 import datetime
-import logging
 import re
-from base64 import b64decode, b64encode
-
-import fastapi
 import httpx
+from base64 import b64decode, b64encode
+from fastapi import FastAPI
 
 from app.main import create_app as create_fastapi_app
 from app.core.log_config import logger
@@ -21,7 +19,7 @@ def body_to_bytes(event):
         event["body"] = event["body"].encode()
 
 
-async def call_app(application: fastapi.FastAPI, event) -> httpx.Response:
+async def call_app(application: FastAPI, event) -> httpx.Response:
     host_url = event["headers"].get("Host", "https://raw-function.net")
     if not host_url.startswith("http"):
         host_url = f"https://{host_url}"
