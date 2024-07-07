@@ -80,7 +80,10 @@ async def handle(event, _):
     logger.debug(f'{event=}', extra={'user': 'handler'})
     fastapi_app = create_fastapi_app()
     try:
+        state_dict = {key: str(value) for key, value in fastapi_app.state.__dict__.items()}
+        logger.info(f"Check in Handle State: {state_dict}")
         if not hasattr(fastapi_app.state, "bot"):
+            logger.info("Start Initialized")
             await initialize_components(fastapi_app)
         else:
             logger.info("Components already initialized")
