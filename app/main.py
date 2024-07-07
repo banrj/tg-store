@@ -27,7 +27,7 @@ async def lifespan(_: FastAPI):
 
         conn = app_dynamo.DynamoConnection(client_conn, resource_conn)
         logger.debug(f'starting... after conn created')
-        async with conn.table() as (table):
+        async with conn.table() as table:
             logger.debug(f'starting... before yield, {table=}, {client_conn=}')
             logger.info("APPLICATION STARTUP \t\tCOMPLETE")
             logger.info("DYNAMO STORAGE INITIALIZATION")
