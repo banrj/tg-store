@@ -57,7 +57,7 @@ class Dispatcher:
         self.asgi_app = asgi_app
 
     async def _invoke_app(self, event: YFunctionEvent):
-        dispatcher_loger.info(f"Пошел ИНВОК")
+        dispatcher_loger.debug(f'Инвок Пошел: {event}')
 
         dispatcher_loger.debug(event)
 
