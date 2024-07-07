@@ -9,14 +9,14 @@ async def handle(event, context):
     logger.info(f"APPLICATION STARTUP {datetime.now()}")
     logger.debug(f'{event=}')
 
-    # Создание FastAPI приложения
     fastapi_app = create_fastapi_app()
+    logger.info(f"FASTAPi {datetime.now()}")
 
-    # Создание обработчика запросов
     dispatcher = Dispatcher(fastapi_app)
+    logger.info(f"DISPATCHER YC {datetime.now()}")
 
     try:
-        response = await dispatcher(event, context)
+        response = await dispatcher.start_event(event, context)
     except Exception as e:
         logger.error(f"Error during handling: {e}")
         return {

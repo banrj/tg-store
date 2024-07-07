@@ -85,7 +85,7 @@ class Dispatcher:
                 asgi_app_response = await asgi_app_client.send(request)
                 return asgi_app_response
 
-    async def __call__(self, event: YFunctionEvent, ctx):
+    async def start_event(self, event: YFunctionEvent, ctx):
         dispatcher_loger.info(f"DISPATCHER STARTUP")
 
         if not event:
