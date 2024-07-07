@@ -10,7 +10,8 @@ def tg_app(req: Request) -> BotDispatcher:
     # if tgapp is None:
     #     raise HTTPException(status_code=500, detail="Telegram app is not initialized")
     # return tgapp
-    return req.app.state.dispatcher_tg
+    # return req.app.state.dispatcher_tg
+    return BotDispatcher()
 
 
 @contextlib.asynccontextmanager
