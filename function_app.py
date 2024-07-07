@@ -16,6 +16,7 @@ async def handle(event, context):
     logger.info(f"DISPATCHER YC {datetime.now()}")
 
     try:
+        logger.info(f"try start event")
         response = await dispatcher.start_event(event, context)
     except Exception as e:
         logger.error(f"Error during handling: {e}")
