@@ -20,6 +20,7 @@ def body_to_bytes(event):
 
 
 async def call_app(application: FastAPI, event) -> httpx.Response:
+    logger.info('-----CALL APP-----')
     host_url = event["headers"].get("Host", "https://raw-function.net")
     if not host_url.startswith("http"):
         host_url = f"https://{host_url}"
@@ -100,6 +101,7 @@ async def handle(event, _):
             "body": "got empty event",
         }
     if 'event_metadata' in event:
+        logger.info('event_metadata in handle')
         return {
             "statusCode": 200,
             "body": "event_metadata",
