@@ -7,7 +7,7 @@ from fastapi import FastAPI
 
 from app.main import create_app as create_fastapi_app
 from app.core.log_config import logger
-from app.tg.create_app import initialize_components
+from app.tg.create_app import initialize_components, shutdown
 
 
 def body_to_bytes(event):
@@ -99,9 +99,9 @@ async def handle(event, _):
     if 'event_metadata' in event:
         return {
             "statusCode": 200,
-            "body": "ok",
+            "body": "event_metadata",
         }
     response = await call_app(fastapi_app, event)
-
+    await shutdown(fastapi_app)
     logger.info(f"APPLICATION SHUTDOWN {datetime.datetime.now()}", extra={'user': 'handler'})
     return patch_response(response)

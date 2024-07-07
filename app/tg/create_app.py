@@ -60,4 +60,4 @@ async def initialize_components(fastapi):
 
 async def shutdown(fastapi):
     await fastapi.app.state.bot.close()
-    logger.info('SHUTDOWN')
+    logger.info('BOT SHUTDOWN')

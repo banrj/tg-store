@@ -27,7 +27,6 @@ async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
         return Response(status_code=500, content=str(e))
     finally:
         logger.info("Update processed successfully")
-        await shutdown(request.app)
         return Response(status_code=200, content='Update передан боту')
 
 
