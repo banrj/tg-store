@@ -7,7 +7,6 @@ from fastapi import FastAPI
 
 from app.main import create_app as create_fastapi_app
 from app.core.log_config import logger
-from app.tg.create_app import initialize_components, shutdown
 
 
 def body_to_bytes(event):

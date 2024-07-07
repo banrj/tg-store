@@ -16,7 +16,7 @@ from app.core.log_config import logger
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    logger.info("APPLICATION STARTUP")
+    logger.info("Lifespan STARTUP")
     bot = Bot(token=settings.TG_KEY, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     logger.info("BOT CREATED")
 

@@ -1,11 +1,8 @@
 from fastapi import Response, Request, APIRouter
-from aiogram import Bot
 from aiogram.types import Update
 
 from app.common import TelegramApp
-from app.config import settings
 from app.core.log_config import logger
-from app.tg.create_app import shutdown
 
 main_router = APIRouter()
 
@@ -20,7 +17,7 @@ async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
         logger.info(f"Check State: {state_dict}")
 
         update = Update.model_validate(await request.json(), context={"bot": state_dict['bot']})
-        await tg_app.feed_webhook_update(update=update, bot=state_dict['bot'])
+        await tg_app.feed_update(update=update, bot=state_dict['bot'])
 
     except Exception as e:
         logger.error(f"Что-то в роуте: {e}")

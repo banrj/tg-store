@@ -16,8 +16,12 @@ from app.config import settings
 async def create_tg(bot: Bot, storage: DynamoDBStorage, use_webhook: bool):
     logger.info("Crate TG in Lifespan")
     dp = Dispatcher(storage=storage)
+    if not hasattr(dp, '_start_rout_added'):
+        dp.include_router(start_rout)
+        dp._start_rout_added = True
+    else:
+        logger.info(f'Router is already attached')
 
-    dp.include_router(start_rout)
     if use_webhook:
         logger.info(f'Webhook use: {settings.WEBHOOK}')
     else:
@@ -39,27 +43,27 @@ async def create_tg(bot: Bot, storage: DynamoDBStorage, use_webhook: bool):
         logger.info('SHUTDOWN')
 
 
-async def initialize_components(fastapi):
-    logger.info("Initializing components")
-    bot = Bot(token=settings.TG_KEY, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
-    async with app_dynamo.dynamodb_connection() as (resource_conn, client_conn):
-        conn = app_dynamo.DynamoConnection(client_conn, resource_conn)
-        async with conn.table() as table:
-            dynamo_storage = DynamoDBStorage(table=table)
-            try:
-                dp = Dispatcher(storage=dynamo_storage)
-                dp.include_router(start_rout)
-            except Exception as e:
-                logger.error(e)
-            logger.info(f'Webhook use: {settings.WEBHOOK}')
-
-            fastapi.state.dynamo_table = table
-            fastapi.state.dynamo_client = client_conn
-            fastapi.state.storage = dynamo_storage
-            fastapi.state.bot = bot
-            fastapi.state.dispatcher_tg = dp
-
-
-async def shutdown(fastapi):
-    await fastapi.state.bot.close()
-    logger.info('BOT SHUTDOWN')
+# async def initialize_components(fastapi):
+#     logger.info("Initializing components")
+#     bot = Bot(token=settings.TG_KEY, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+#     async with app_dynamo.dynamodb_connection() as (resource_conn, client_conn):
+#         conn = app_dynamo.DynamoConnection(client_conn, resource_conn)
+#         async with conn.table() as table:
+#             dynamo_storage = DynamoDBStorage(table=table)
+#             try:
+#                 dp = Dispatcher(storage=dynamo_storage)
+#                 dp.include_router(start_rout)
+#             except Exception as e:
+#                 logger.error(e)
+#             logger.info(f'Webhook use: {settings.WEBHOOK}')
+#
+#             fastapi.state.dynamo_table = table
+#             fastapi.state.dynamo_client = client_conn
+#             fastapi.state.storage = dynamo_storage
+#             fastapi.state.bot = bot
+#             fastapi.state.dispatcher_tg = dp
+#
+#
+# async def shutdown(fastapi):
+#     await fastapi.state.bot.close()
+#     logger.info('BOT SHUTDOWN')
