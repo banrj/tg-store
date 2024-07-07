@@ -26,10 +26,8 @@ class Settings(BaseSettings):
 match os.getenv('MODE'):
     case 'CICD':
         settings = Settings()  # в этом случае переменные окружения настроены в workflow
-        print(f'{settings=}')
     case _:
         settings = Settings(_env_file=('.env', '../.env'))
-        print(settings)
 
 LOGGER_LEVEL = logging.DEBUG
 

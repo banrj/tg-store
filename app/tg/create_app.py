@@ -46,9 +46,11 @@ async def initialize_components(fastapi):
         conn = app_dynamo.DynamoConnection(client_conn, resource_conn)
         async with conn.table() as table:
             dynamo_storage = DynamoDBStorage(table=table)
-            dp = Dispatcher(storage=dynamo_storage)
-            dp.include_router(start_rout)
-
+            try:
+                dp = Dispatcher(storage=dynamo_storage)
+                dp.include_router(start_rout)
+            except Exception as e:
+                logger.error(e)
             logger.info(f'Webhook use: {settings.WEBHOOK}')
 
             fastapi.state.dynamo_table = table
