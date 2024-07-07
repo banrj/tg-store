@@ -12,6 +12,7 @@ from app.tg.fsm.storage import DynamoDBStorage
 from app.db import connection as app_dynamo
 from app.config import settings
 from app.core.log_config import logger
+from app.core.context import AppContext
 
 
 @asynccontextmanager
@@ -34,8 +35,14 @@ async def lifespan(_: FastAPI):
             logger.info("DYNAMO STORAGE INITIALIZATION \t\tSUCCESS")
             async with create_tg(bot=bot, storage=dynamo_storage, use_webhook=settings.USE_WEBHOOK) as tg_dp:
                 logger.info("TG BOT - SUCCESS")
-                yield {"dynamo_table": table, "dynamo_client": client_conn, "storage": dynamo_storage,
-                       "bot": bot, 'dispatcher_tg': tg_dp}
+                AppContext().initialize(
+                    bot=bot,
+                    dynamo_table=table,
+                    dynamo_client=client_conn,
+                    dynamo_storage=dynamo_storage,
+                    dispatcher_tg=tg_dp
+                )
+                yield
                 logger.info("TG BOT`s SHUTDOWN")
 
     logger.info("APPLICATION SHUTDOWN")

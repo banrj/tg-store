@@ -1,23 +1,21 @@
 from fastapi import Response, Request, APIRouter
 from aiogram.types import Update
 
-from app.common import TelegramApp
+from app.common import TgBot, BotDispatcher
 from app.core.log_config import logger
 
 main_router = APIRouter()
 
 
 @main_router.post('/tgwebhook', tags=['telegram'], response_model=None)
-async def telegram_webhook(request: Request, tg_app: TelegramApp) -> Response:
+async def telegram_webhook(request: Request, dp: BotDispatcher, bot: TgBot) -> Response:
     """Handle incoming Telegram updates by putting them into the `update_queue`"""
     try:
         json_data = await request.json()
-        state_dict = {key: str(value) for key, value in request.app.state.__dict__.items()}
         logger.info(f"Дернули rout: {json_data}")
-        logger.info(f"Check State: {state_dict}")
 
-        update = Update.model_validate(await request.json(), context={"bot": state_dict['bot']})
-        await tg_app.feed_update(update=update, bot=state_dict['bot'])
+        update = Update.model_validate(await request.json(), context={"bot": bot})
+        await dp.feed_update(update=update, bot=bot)
 
     except Exception as e:
         logger.error(f"Что-то в роуте: {e}")
