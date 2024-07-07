@@ -11,7 +11,6 @@ main_router = APIRouter()
 async def telegram_webhook(request: Request, dp: BotDispatcher, bot: TgBot) -> Response:
     """Handle incoming Telegram updates by putting them into the `update_queue`"""
     try:
-        logger.info(dp, bot)
         json_data = await request.json()
         logger.info(f"Дернули rout: {json_data}")
 

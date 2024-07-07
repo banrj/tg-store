@@ -18,7 +18,7 @@ async def dynamodb_connection(
 
     setup_data = {
         "service_name": 'dynamodb',
-        "region_name": 'us-west-1',
+        "region_name": 'ru-central1',
         "aws_access_key_id": access_key,
         "aws_secret_access_key": secret_key,
         "endpoint_url": endpoint_url,
