@@ -102,6 +102,6 @@ async def handle(event, _):
             "body": "event_metadata",
         }
     response = await call_app(fastapi_app, event)
-    shutdown(fastapi_app)
+    await shutdown(fastapi_app)
     logger.info(f"APPLICATION SHUTDOWN {datetime.datetime.now()}", extra={'user': 'handler'})
     return patch_response(response)

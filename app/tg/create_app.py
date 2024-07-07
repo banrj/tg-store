@@ -58,6 +58,6 @@ async def initialize_components(fastapi):
             fastapi.state.dispatcher_tg = dp
 
 
-def shutdown(fastapi):
-    fastapi.state.bot.close()
+async def shutdown(fastapi):
+    await fastapi.state.bot.close()
     logger.info('BOT SHUTDOWN')
