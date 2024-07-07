@@ -24,21 +24,21 @@ async def call_app(application: FastAPI, event) -> httpx.Response:
     if not host_url.startswith("http"):
         host_url = f"https://{host_url}"
     body_to_bytes(event)
-    async with LifespanManager(
-            application,
-            startup_timeout=float(60),
-            shutdown_timeout=float(60)
-    ) as lifespan_manager:
-        async with httpx.AsyncClient(app=lifespan_manager.app, base_url=host_url) as client:
-            request = client.build_request(
-                method=event["httpMethod"],
-                url=event["url"],
-                headers=event["headers"],
-                params=event["queryStringParameters"],
-                content=event["body"],
-            )
-            response = await client.send(request)
-        return response
+    # async with LifespanManager(
+    #         application,
+    #         startup_timeout=float(60),
+    #         shutdown_timeout=float(60)
+    # ) as lifespan_manager:
+    async with httpx.AsyncClient(app=application, base_url=host_url) as client:
+        request = client.build_request(
+            method=event["httpMethod"],
+            url=event["url"],
+            headers=event["headers"],
+            params=event["queryStringParameters"],
+            content=event["body"],
+        )
+        response = await client.send(request)
+    return response
 
 
 def is_binary(response):
