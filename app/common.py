@@ -9,8 +9,8 @@ from app.core.context import AppContext
 def tg_dp() -> Dispatcher:
     context = AppContext()
     dp = context.get_dispatcher_tg()
-    if dp is None:
-        raise HTTPException(status_code=500, detail="Telegram dp is not initialized")
+    # if dp is None:
+    #     raise HTTPException(status_code=500, detail="Telegram dp is not initialized")
     return dp
     # tgapp = getattr(req.app.state, 'tg_app', None)
     # return tgapp
@@ -20,8 +20,8 @@ def tg_dp() -> Dispatcher:
 def tg_bot() -> Bot:
     context = AppContext()
     bot = context.get_bot()
-    if bot is None:
-        raise HTTPException(status_code=500, detail="Telegram bot is not initialized")
+    # if bot is None:
+    #     raise HTTPException(status_code=500, detail="Telegram bot is not initialized")
     return bot
 
 
