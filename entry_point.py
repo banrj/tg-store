@@ -1,5 +1,5 @@
-from aiogram import Bot, Dispatcher, types
-
+from aiogram import Bot, Dispatcher
+from aiogram.types import Update
 
 
 import asyncio
@@ -33,7 +33,7 @@ async def process_event(event, dp: Dispatcher, bot: Bot):
     update = json.loads(event['body'])
     log.debug('Update: ' + str(update))
 
-    update = types.Update.to_object(update)
+    update = Update.model_validate(update, context={"bot": bot})
     await dp.feed_update(update=update, bot=bot)
 
 
