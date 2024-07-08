@@ -38,7 +38,7 @@ async def call_app(application: FastAPI, event) -> httpx.Response:
                 content=event["body"],
             )
             response = await client.send(request)
-    return response
+            return response
 
 
 def is_binary(response):
@@ -83,8 +83,6 @@ async def handle(event, _):
     logger.info(f"APPLICATION STARTUP {datetime.datetime.now()}", extra={'user': 'handler'})
     logger.debug(f'{event=}', extra={'user': 'handler'})
     fastapi_app = create_fastapi_app()
-    state_dict = {key: str(value) for key, value in fastapi_app.state.__dict__.items()}
-    logger.info(f"Check in Handle State: {state_dict}")
 
     if not event:
         return {
