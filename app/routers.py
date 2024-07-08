@@ -15,6 +15,7 @@ async def telegram_webhook(request: Request, dp: BotDispatcher, bot: TgBot) -> R
         logger.info(f"Дернули rout: {json_data}")
 
         update = Update.model_validate(json_data, context={"bot": bot})
+        logger.info(f'UPDATE: {update=}')
         await dp.feed_update(update=update, bot=bot)
 
     except Exception as e:
