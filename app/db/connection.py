@@ -25,7 +25,7 @@ async def dynamodb_connection(
     }
 
     async with session.resource(**setup_data) as dyno_resource, session.client(**setup_data) as dyno_client:
-
+        logger.info(dyno_resource, dyno_client)
         yield dyno_resource, dyno_client
 
 
