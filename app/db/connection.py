@@ -38,7 +38,6 @@ class DynamoConnection:
         self._resource = dyno_resource
         self._default_table = default_table
 
-    @asynccontextmanager
     async def table(self, table_name: str | None = None):
         logger.debug(f'{table_name=}')
         if table_name is None:
