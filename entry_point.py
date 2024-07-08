@@ -48,6 +48,6 @@ async def handler(event, context):
         await register_handlers(dp)
         await process_event(event, dp, bot)
         await bot.close()
-
+        await dp.shutdown()
         return {'statusCode': 200, 'body': 'ok'}
     return {'statusCode': 405}
