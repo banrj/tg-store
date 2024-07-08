@@ -7,7 +7,6 @@ from app.config import settings
 from app.core.log_config import logger
 
 
-@asynccontextmanager
 async def dynamodb_connection(
     endpoint_url: pydantic.HttpUrl = settings.YC_DATABASE_URL,
     access_key: str = settings.YC_SERVICE_ACCOUNT_KEY_ID,
