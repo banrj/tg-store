@@ -1,6 +1,5 @@
 import aioboto3
 import pydantic
-import typing as t
 import types_aiobotocore_dynamodb as aiodyno_types
 from contextlib import asynccontextmanager
 from app.config import settings
@@ -13,7 +12,7 @@ async def dynamodb_connection(
     endpoint_url: pydantic.HttpUrl = settings.YC_DATABASE_URL,
     access_key: str = settings.YC_SERVICE_ACCOUNT_KEY_ID,
     secret_key: str = settings.YC_SERVICE_ACCOUNT_SECRET_KEY,
-) -> t.AsyncIterator[tuple[aiodyno_types.DynamoDBServiceResource, aiodyno_types.DynamoDBClient]]:
+) -> [tuple[aiodyno_types.DynamoDBServiceResource, aiodyno_types.DynamoDBClient]]:
     session = aioboto3.Session()
 
     setup_data = {
@@ -25,8 +24,7 @@ async def dynamodb_connection(
     }
 
     async with session.resource(**setup_data) as dyno_resource, session.client(**setup_data) as dyno_client:
-        logger.info(dyno_resource, dyno_client)
-        yield dyno_resource, dyno_client
+        return dyno_resource, dyno_client
 
 
 class DynamoConnection:
@@ -49,5 +47,5 @@ class DynamoConnection:
         table = await self._resource.Table(table_name)
         logger.debug(f'{table_name=}')
         logger.info(table)
-        yield table
-        logger.debug(f'dynamo db connection to {table_name} is done')
+        return table
+        # logger.debug(f'dynamo db connection to {table_name} is done')
