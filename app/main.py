@@ -41,6 +41,8 @@ async def lifespan(_: FastAPI):
             dynamo_client=client_conn,
             dynamo_storage=dynamo_storage,
             dispatcher_tg=tg_dp)
+        logger.info(f"Context INITIALIZATION \t\tSUCCESS \n {AppContext=}")
+
         yield
         logger.info("TG BOT`s SHUTDOWN")
 
