@@ -48,5 +48,6 @@ class DynamoConnection:
             table_name = self._default_table
         table = await self._resource.Table(table_name)
         logger.debug(f'{table_name=}')
+        logger.info(table)
         yield table
         logger.debug(f'dynamo db connection to {table_name} is done')
