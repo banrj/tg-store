@@ -39,11 +39,15 @@ class DynamoConnection:
         self._default_table = default_table
 
     async def table(self, table_name: str | None = None):
-        logger.debug(f'{table_name=}')
+        logger.debug(f'Запрашиваемая таблица: {table_name}')
         if table_name is None:
             table_name = self._default_table
-        table = await self._resource.Table(table_name)
-        logger.debug(f'{table_name=}')
-        logger.info(table)
-        return table
-        # logger.debug(f'dynamo db connection to {table_name} is done')
+        try:
+            table_list = await self._client.list_tables()
+            table_names = table_list.get('TableNames', [])
+            logger.info(f"Доступные таблицы: {table_names}")
+            response = await self._client.describe_table(TableName=table_name)
+            logger.info(f"Таблица '{table_name}' существует: {response}")
+        except Exception as e:
+            logger.error(f"Ошибка при проверке таблицы '{table_name}': {e}")
+            raise

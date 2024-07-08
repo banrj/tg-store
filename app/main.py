@@ -23,6 +23,7 @@ async def lifespan(_: FastAPI):
 
     logger.info("DATABASE INITIALIZATION...")
     resource_conn, client_conn = await app_dynamo.dynamodb_connection()
+
     logger.info("DATABASE INITIALIZATION \t\tSUCCESS")
 
     conn = app_dynamo.DynamoConnection(client_conn, resource_conn)
