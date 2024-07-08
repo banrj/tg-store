@@ -44,7 +44,7 @@ async def handler(event, context):
         # Bot and dispatcher initialization
         bot = Bot(settings.TG_KEY)
         dp = Dispatcher()
-
+        await bot.set_webhook(settings.WEBHOOK)
         await register_handlers(dp)
         await process_event(event, dp, bot)
         await bot.delete_webhook()
