@@ -2,7 +2,7 @@ name: Deploy Yandex Function
 run-name: ${{ github.actor }} function deploy
 on:
   push:
-    branches: [dev, master,'cicd/**']
+    branches: [master]
 
 jobs:
   Unit-tests-dev:
