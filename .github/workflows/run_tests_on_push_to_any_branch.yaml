@@ -26,3 +26,5 @@ jobs:
           . venv/bin/activate
           pip install -r requirements-test.txt
           python -m pytest --cov=./app --cov-report=html
+          echo "MODE=CICD" >> $GITHUB_ENV
+
