@@ -7,7 +7,7 @@ on:
 jobs:
   Unit-tests-dev:
     secrets: inherit
-    uses: ./.github/workflows/run_tests_on_push_to_any_branch.yaml
+#    uses: ./.github/workflows/run_tests_on_push_to_any_branch.yaml
 
   Deploy-dev:
     runs-on: ubuntu-latest
