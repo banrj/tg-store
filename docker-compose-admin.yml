@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  local-dynamodb:
+    image: amazon/dynamodb-local
+    container_name: tgstore-mvp-dynamodb
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    user: root
+    ports:
+      - "9009:8000"
+    environment:
+      - TZ=Europe/Kaliningrad
+    volumes:
+      - "./dynamodb:/home/dynamodblocal/data"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+    working_dir: /home/dynamodblocal
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    ports:
+      - "8001:8001"
+    environment:
+      DYNAMO_ENDPOINT: "http://tgstore-mvp-dynamodb:8000"
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+    depends_on:
+      - local-dynamodb

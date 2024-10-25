@@ -1,0 +1,44 @@
+name: Deploy Yandex Function
+run-name: ${{ github.actor }} function deploy
+on:
+  push:
+    branches: [dev, master,'cicd/**']
+
+jobs:
+  Unit-tests-dev:
+    secrets: inherit
+    uses: ./.github/workflows/run_tests_on_push_to_any_branch.yaml
+
+  Deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [Unit-tests-dev]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Deploy Function
+        id: sls-func
+        uses: yc-actions/yc-sls-function@v2
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+          folder-id: "d4e60k7lv0bk009im4ai"
+          function-name: "tg-store"
+          runtime: "python312"
+          memory: "128Mb"
+          execution-timeout: 10
+          entrypoint: "function_app.handle"
+          environment: |
+            YC_DATABASE_URL=${{ secrets.YC_DATABASE_URL }}
+            YC_PRODUCTS_BUCKET_NAME=p_bucket
+            YC_SERVICE_ACCOUNT_KEY_ID=${{ secrets.YC_SERVICE_ACCOUNT_KEY_ID }}
+            YC_SERVICE_ACCOUNT_SECRET_KEY=${{ secrets.YC_SERVICE_ACCOUNT_SECRET_KEY }}
+            APP_BOT_API_KEY= 345678
+            TG_SHA256_HASH_BOT_TOKEN=abcd1234
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            YC_SERVICE_BUCKET_NAME=buccket
+            ADMIN_API_KEY=admin
+            TABLE_SUFFIX=dev
+
+          include: |
+            ./app
+            function_app.py
+            requirements.txt

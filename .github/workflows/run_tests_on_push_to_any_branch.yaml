@@ -1,0 +1,28 @@
+name: Run tests
+on:
+  push:
+    branches-ignore:
+      - dev
+      - stage
+      - prod
+      - main
+  workflow_call:
+
+jobs:
+
+  Unit-tests-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./.github/actions/python-setup-action
+
+      - name: Setup docker with AWS DynamoDB local
+        run: docker compose up -d
+
+      - name: Activate venv and Run Test
+        run: |
+          . venv/bin/activate
+          pip install -r requirements-test.txt
+          python -m pytest --cov=./app --cov-report=html
